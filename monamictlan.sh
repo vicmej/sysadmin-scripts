@@ -26,7 +26,7 @@ ssh_80_blackip () {
   do
     grep $IP $BLACKIP
 	 if [ $? -eq 1 ]; then
-       /usr/sbin/iptables -A INPUT -s $IP -j DROP
+       /usr/sbin/iptables -t nat -A PREROUTING -s $IP -j DNAT --to-destination 192.168.11.23
        echo "$IP" >> /etc/iptables/blackip
     fi
   done

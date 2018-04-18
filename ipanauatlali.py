@@ -5,6 +5,7 @@
 # almacenadas en un archivo de texto. La informacion que recaba es: direccion
 # ip, pais, region, ciudad, latitud y longitud. las cuales son almacenadas en
 # un archivo con formato cvs.
+# Autor: Victor J. Mejia Lara
 ##############################################################################
 #!/usr/bin/python
 import argparse

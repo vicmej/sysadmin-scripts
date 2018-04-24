@@ -12,7 +12,14 @@ y realiza rotación de archivos. La rotación se realiza de la siguiente manera:
 Script que obtiene direcciones IP's que están verificando aplicaciones web mal configurada por el puerto 80 pero
 el puerto se está usando para conexiones ssh.
 
-# ipgeo.py
+# ipanauatlali.py
 Programa que recopila información de una lista de direcciones ip's almacenadas en un archivo de
 texto. La información que recaba es: dirección ip, país, región, ciudad, latitud y longitud. las
 cuales son almacenadas en un archivo con formato cvs.
+
+<i>Historial</i>
+<b>0.1</b>
+Realiza consultas de todas la ip's almacenadas en el archivo para recolectar ubicación y geo localizacion.
+
+<b>0.2</b>
+Se agrega barra de proceso sobre la recopilación de los datos de las ip's.

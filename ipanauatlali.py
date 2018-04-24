@@ -7,12 +7,13 @@
 # un archivo con formato cvs.
 # Autor: Victor J. Mejia Lara
 ##############################################################################
-#!/usr/bin/python
+#!/usr/bin/env python
 import argparse
 import requests
 import time
 import os.path as path
 from lxml import etree
+from progress.bar import Bar
 
 param = argparse.ArgumentParser(description="Get information of: country, region, city, latitud and longitud about a list of IP's ")
 group = param.add_mutually_exclusive_group()
@@ -34,7 +35,7 @@ elif args.file:
     if not path.exists(args.file):
         quit()
 elif args.version:
-    print("Version 0.1")
+    print("Version 0.2")
 else:
     print("Miss the -f option")
     quit()
@@ -42,15 +43,20 @@ else:
 try:
     ipFile = open(args.file,"r")
     audit = open(args.out, "w")
+
+    tamarch = path.getsize(args.file)
 except IOException:
     print("Error to open file")
 
 print("Starting query")
 contip = 0
+size = 0
 errorip = 0
 error = False
 
+bar = Bar('Loading', fill='#', max=tamarch, suffix='%(index)dB %(percent)d%% - %(eta)ds')
 for ip in ipFile.readlines():
+    size += len(ip);
     r = requests.get('http://ip-api.com/xml/'+ip.rstrip('\n'))
     ipxml = etree.XML(r.content)
 
@@ -73,10 +79,12 @@ for ip in ipFile.readlines():
         print(region.text.encode('utf-8','replace'))
         print(city.text.encode('utf-8','replace'))
         print("Coordenadas " + lat.text + " , " + lon.text)
-
+    else:
+        bar.goto(size)
     audit.write(ip.rstrip('\n') + "," + country.text + "," + region.text.encode('utf-8','replace') + "," + city.text.encode('utf-8','replace') + "," + lat.text + "," + lon.text + '\n')
     time.sleep(1)
 
+bar.finish()
 print("Query terminated")
 print("Total ip query: " + repr(contip))
 print("Error ip query: " + repr(errorip))

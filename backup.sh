@@ -38,11 +38,11 @@ scanvirus() {
 }
 
 backupFile() {
-	FINDTAR=`find $DEVICE -type f -name "backupIntegra*.tar" | tail -1 | cut -d '/' -f 3`
+	FINDTAR=`find $DEVICE -type f -name "backupIntegra_??_??_??.tar" | tail -1 | cut -d '/' -f 3`
 	DAYTAR=`echo $FINDTAR | cut -d '_' -f 2`
 	MONTHTAR=`echo $FINDTAR | cut -d '_' -f 3`
 	YEARTAR=`echo $FINDTAR | cut -d '_' -f 4 | cut -d '.' -f 1`
-	
+
 	echo "------$FINDTAR"
 	if [ -z $FINDTAR ]; then
 		echo "Starting backup..."

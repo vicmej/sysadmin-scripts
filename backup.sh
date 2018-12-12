@@ -38,7 +38,8 @@ scanvirus() {
 }
 
 backupFile() {
-	FINDTAR=`find $DEVICE -type f -name "backupIntegra_??_??_??.tar" | tail -1 | cut -d '/' -f 3`
+	cd $DEVICE
+	FINDTAR=`find ./ -type f -name "backupIntegra_??_??_??.tar" | tail -1`
 	DAYTAR=`echo $FINDTAR | cut -d '_' -f 2`
 	MONTHTAR=`echo $FINDTAR | cut -d '_' -f 3`
 	YEARTAR=`echo $FINDTAR | cut -d '_' -f 4 | cut -d '.' -f 1`

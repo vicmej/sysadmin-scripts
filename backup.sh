@@ -58,6 +58,8 @@ backupFile() {
       $GZIP $DEVICE/backupIntegra_$(date +%y).tar
 
 		rm -f $DEVICE/backupIntegra_$YEARTAR*
+		sleep 1
+		rm -f $DEVICE/backupIntegra_??_$MONTHTAR*
 
 	elif [ $MONTHTAR -lt $(date +%m) ]; then
 		echo "Month"

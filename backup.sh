@@ -54,7 +54,7 @@ backupFile() {
 	elif [ $YEARTAR -lt $(date +%y) ]; then
 		echo "Year"
 
-		cp $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%y).tar
+		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%y).tar
       $GZIP $DEVICE/backupIntegra_$(date +%y).tar
 
 		rm -f $DEVICE/backupIntegra_$YEARTAR*
@@ -63,13 +63,13 @@ backupFile() {
 
 	elif [ $MONTHTAR -lt $(date +%m) ]; then
 		echo "Month"
-		cp $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%m_%y).tar
-		$GZIP $DEVICE/backupIntegra_$(date +%m_5y).tar
+		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%m_%y).tar
+		$GZIP $DEVICE/backupIntegra_$(date +%m_%y).tar
 
 		rm -f $DEVICE/backupIntegra_??_$MONTHTAR*
 
 	elif [ $DAYTAR -lt $(date +%d) ]; then
-		cp $DEVICE/$FINDTAR $DEVICE/backupIntegra_$DATE.tar
+		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$DATE.tar
 
 		echo -e "\e[1;34mAgregando archivos nuevos al respaldo\e[0m"
 

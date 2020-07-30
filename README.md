@@ -17,6 +17,9 @@ Programa que recopila información de una lista de direcciones ip's almacenadas 
 texto. La información que recaba es: dirección ip, país, región, ciudad, latitud y longitud. las
 cuales son almacenadas en un archivo con formato cvs.
 
+# tetenami.py
+Bloquea segmentos de redes a traves de iptables.
+
 <i>Historial</i>
 <b>0.1</b>
 Realiza consultas de todas la ip's almacenadas en el archivo para recolectar ubicación y geo localizacion.

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # ############################################################################
 # Programa: ipanauatlali.py
 # Descripcion:
@@ -7,14 +8,14 @@
 # un archivo con formato cvs.
 # Autor: Victor J. Mejia Lara
 ##############################################################################
-#!/usr/bin/env python
-import argparse
+
 import requests
 import time
 import os.path as path
 from lxml import etree
 from progress.bar import Bar
 
+import argparse
 param = argparse.ArgumentParser(description="Get information of: country, region, city, latitud and longitud about a list of IP's ")
 group = param.add_mutually_exclusive_group()
 group.add_argument("-v","--verbose", help="show the version and result of the query", action="store_true")
@@ -57,6 +58,7 @@ error = False
 bar = Bar('Loading', fill='#', max=tamarch, suffix='%(index)dB %(percent)d%% - %(eta)ds')
 for ip in ipFile.readlines():
     size += len(ip);
+    print(ip)
     r = requests.get('http://ip-api.com/xml/'+ip.rstrip('\n'))
     ipxml = etree.XML(r.content)
 
@@ -81,7 +83,7 @@ for ip in ipFile.readlines():
         print("Coordenadas " + lat.text + " , " + lon.text)
     else:
         bar.goto(size)
-    audit.write(ip.rstrip('\n') + "," + country.text + "," + region.text.encode('utf-8','replace') + "," + city.text.encode('utf-8','replace') + "," + lat.text + "," + lon.text + '\n')
+    audit.write(ip.rstrip('\n') + "," + country.text + "," + region.text + "," + city.text + "," + lat.text + "," + lon.text + '\n')
     time.sleep(1)
 
 bar.finish()

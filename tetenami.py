@@ -5,7 +5,7 @@
 #   Programa que obtiene los segmentos de red del pais
 #   que se encuentran registrados para bloquear segmentos de otros
 #   paises.
-# Autor: Victor J. Mejia Lara
+# Autor: Victor J. Mejia Lara (@d4rkw01f)
 #########################################################
 
 import argparse

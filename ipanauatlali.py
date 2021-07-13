@@ -6,7 +6,7 @@
 # almacenadas en un archivo de texto. La informacion que recaba es: direccion
 # ip, pais, region, ciudad, latitud y longitud. las cuales son almacenadas en
 # un archivo con formato cvs.
-# Autor: Victor J. Mejia Lara
+# Autor: Victor J. Mejia Lara (@d4rkw01f)
 ##############################################################################
 
 import requests
@@ -58,17 +58,16 @@ error = False
 bar = Bar('Loading', fill='#', max=tamarch, suffix='%(index)dB %(percent)d%% - %(eta)ds')
 for ip in ipFile.readlines():
     size += len(ip);
-    print(ip)
     r = requests.get('http://ip-api.com/xml/'+ip.rstrip('\n'))
     ipxml = etree.XML(r.content)
 
     status = ipxml[0]
-    if status.find('sucess') != -1:
-        country = ipxml[1]
-        region = ipxml[4]
-        city = ipxml[5]
-        lat = ipxml[7]
-        lon = ipxml[8]
+    if status.find('success') != -1:
+        country = ipxml.find('country')
+        region = ipxml.find('region')
+        city = ipxml.find('city')
+        lat  = ipxml.find('lat')
+        lon = ipxml.find('lon')
         contip = contip + 1
         error = False
     else:
@@ -83,8 +82,8 @@ for ip in ipFile.readlines():
         print("Coordenadas " + lat.text + " , " + lon.text)
     else:
         bar.goto(size)
-    audit.write(ip.rstrip('\n') + "," + country.text + "," + region.text + "," + city.text + "," + lat.text + "," + lon.text + '\n')
-    time.sleep(1)
+    audit.write(ip.rstrip('\n') + "," + country.text + "," + str(region.text) + "," + city.text + "," + lat.text + "," + lon.text + '\n')
+    time.sleep(2)
 
 bar.finish()
 print("Query terminated")

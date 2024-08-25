@@ -12,6 +12,7 @@
 #! /bin/bash -w
 
 DATE=`/usr/bin/date +%d_%m_%y`
+DAY=`/usr/bin/date +%d`
 TAR='/usr/bin/tar cvf'
 TARINC='/usr/bin/tar -uvf'
 TARDIF='/usr/bin/tar -A'
@@ -39,51 +40,53 @@ scanvirus() {
 
 backupFile() {
 	cd $DEVICE
-	FINDTAR=`find ./ -type f -name "backupIntegra_??_??_??.tar" | tail -1`
+	FINDTAR=`find ./ -type f -name "backupKradnet_??_??_??.tar" | tail -1`
 	DAYTAR=`echo $FINDTAR | cut -d '_' -f 2`
 	MONTHTAR=`echo $FINDTAR | cut -d '_' -f 3`
 	YEARTAR=`echo $FINDTAR | cut -d '_' -f 4 | cut -d '.' -f 1`
 
+###############################################################
+#	Crear el respaldo en caso de que no existiera uno anterior #
+###############################################################
 	echo "------$FINDTAR"
 	if [ -z $FINDTAR ]; then
 		echo "Starting backup..."
-		BACKUPFILE="$DEVICE/backupIntegra_$DATE.tar"
+		BACKUPFILE="$DEVICE/backupKradnet_$DATE.tar"
 
 		$TAR $BACKUPFILE $BACKUPDIR
 
+##############################################################
+# Realiza un respaldo anual de todos los archivos.           #
+##############################################################
 	elif [ $YEARTAR -lt $(date +%y) ]; then
 		echo "Year"
 
-		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%y).tar
-      $GZIP $DEVICE/backupIntegra_$(date +%y).tar
+		rsync -ar $DEVICE/$FINDTAR $DEVICE/backuprKradnet_$(date +%y).tar
+      $GZIP $DEVICE/backupKradnet_$(date +%y).tar
 
-		rm -f $DEVICE/backupIntegra_$YEARTAR*
+		rm -f $DEVICE/backupKradnet_$YEARTAR*
 		sleep 1
-		rm -f $DEVICE/backupIntegra_??_$MONTHTAR*
+		rm -f $DEVICE/backupKradnet_??_$MONTHTAR*
 
+#############################################################
+# Realiza un respaldo mensual de todos los archivox         #
+#############################################################
 	elif [ $MONTHTAR -lt $(date +%m) ]; then
 		echo "Month"
-		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$(date +%m_%y).tar
-		$GZIP $DEVICE/backupIntegra_$(date +%m_%y).tar
+		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupKradnet_$(date +%m_%y).tar
+		$GZIP $DEVICE/backupKradnet_$(date +%m_%y).tar
 
-		rm -f $DEVICE/backupIntegra_??_$MONTHTAR*
+		rm -f $DEVICE/backupKradnet_??_$MONTHTAR*
 
+#############################################################
+# Realiza respaldos diarios                                 #
+#############################################################
 	elif [ $DAYTAR -lt $(date +%d) ]; then
-		rsync -ar $DEVICE/$FINDTAR $DEVICE/backupIntegra_$DATE.tar
-
-		echo -e "\e[1;34mAgregando archivos nuevos al respaldo\e[0m"
-
-		#Se agregan los archivos nuevos al archivo de respaldo
-		$TARINC $DEVICE/backupIntegra_$DATE.tar $BACKUPDIR
-
-		if [ $? -ne 0 ]; then
-			echo "Error al generar la actualizacion"
-			exit 0
-		fi
+		MONTHYEAR=`/usr/bin/date +%m_%y`
 
 		#Se agregan los archivos que se hayn modificado en las ultimas 24hrs.
 		echo -e "\e[1;34mAgregando archivos \e[1;33mmodificados \e[1;34mal respaldo\e[0m"
-		find $BACKUPDIR -mtime -1 -exec tar rvf $DEVICE/backupIntegra_$DATE.tar {} \;
+		find $BACKUPDIR -mtime -1 -exec tar rvf $DEVICE/backupKradnet_$DAY"_"$MONTHYEAR.tar {} \;
 
 		sleep 5
 		if [ $? -ne 0 ]; then
@@ -94,7 +97,7 @@ backupFile() {
 		echo "Comprimiendo...."
 		$GZIP $DEVICE/$FINDTAR
 		if [ $? -ne 0 ]; then
-			echo "Error al comprimir el archivo backupIntegra_$DATE"
+			echo "Error al comprimir el archivo backupKradnet_$DATE"
 		fi
 	else
 		echo "No new"
